@@ -10,16 +10,16 @@ struct IntroPageItem : Identifiable {
     var id: String = UUID().uuidString
     var image : String
     var title : String
-    var scale : CGFloat
+    var scale : CGFloat = 1
     var anchor : UnitPoint = .center
     var offset : CGFloat = 0
     var rotation : CGFloat = 0
-    var zIndex : Int = 0
+    var zIndex : CGFloat = 0
     var extraOffset : CGFloat = -350
     var description : String
     
 }
-let introItens : [IntroPageItem] = [
+let staticIntroItens : [IntroPageItem] = [
     .init(image: "calendar.circle.fill",
           title: "Track your daily\nhabits",
           scale: 1,
