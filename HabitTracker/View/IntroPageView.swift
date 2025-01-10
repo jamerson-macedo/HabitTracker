@@ -13,6 +13,7 @@ struct IntroPageView: View {
     @State private var activeIndex : Int = 0
     @State private var askUserName : Bool = false
     @AppStorage("username") private var username : String = ""
+    @AppStorage("isIntroCompleted") private var isIntroCompleted : Bool = false
     var body: some View {
         VStack(spacing : 0){
             Button{
@@ -71,6 +72,21 @@ struct IntroPageView: View {
                 .frame(width: 300)
                 .frame(maxHeight: .infinity)
         }
+        .ignoresSafeArea(.keyboard,edges: .all)
+        .overlay {
+            ZStack(alignment: .bottom) {
+                Rectangle().fill(.black.opacity(askUserName ? 0.3 : 0))
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        askUserName = false
+                        // quando clicar fora ele sai
+                    }
+                if askUserName {
+                    UserNameView().transition(.move(edge: .bottom).combined(with: .offset(y:100)))
+                }
+            }
+            .animation(.snappy,value: askUserName)
+        }
         
     }
     
@@ -98,6 +114,31 @@ struct IntroPageView: View {
             .rotationEffect(.init(degrees: item.rotation))
             .zIndex(isSelected ? 2 : item.zIndex)
         
+    }
+    @ViewBuilder
+    func UserNameView() -> some View {
+        VStack(alignment: .leading, spacing:12){
+            Text("Let's Start with Your Name")
+                .font(.caption)
+                .foregroundStyle(.gray)
+            TextField("Justiine Ezarik", text: $username)
+                .applyPaddedBackground(10,hPadding: 15, vPadding: 12)
+                .opacityShadow(.black, opacity: 0.1, radius: 10)
+            Button{
+                isIntroCompleted = true
+            }label: {
+                Text("Start Tracking your Habits")
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.white)
+                    .hSpacing(.center)
+                    .padding(.vertical,12)
+                    .background(.green.gradient,in: .rect(cornerRadius: 10))
+            }
+            .disableWithOpacity(username.isEmpty)
+            .padding(.top,10)
+        }.applyPaddedBackground(12)
+            .padding(.horizontal,20)
+            .padding(.bottom,10)
     }
     func updateItem(isForward : Bool){
         guard isForward ? activeIndex != introItems.count - 1 : activeIndex != 0 else { return }
