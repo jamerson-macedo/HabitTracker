@@ -12,11 +12,14 @@ struct ContentView: View {
     var body: some View {
         ZStack{
             if isIntroCompleted{
-                HomeView().transition(.move(edge: .trailing))
-            }else {
                 NavigationStack{
-                    IntroPageView()
-                }.transition(.move(edge: .leading))
+                    HomeView()
+                }
+                .transition(.move(edge: .trailing))
+            }else {
+                
+                IntroPageView()
+                    .transition(.move(edge: .leading))
             }
         }.animation(.snappy(duration: 0.25,extraBounce: 0),value: isIntroCompleted)
     }

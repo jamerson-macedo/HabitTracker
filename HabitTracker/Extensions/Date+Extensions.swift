@@ -31,6 +31,14 @@ extension Date{
         }
         return date
     }
+    func format(_ format : String)->String{
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        return formatter.string(from: self)
+    }
+    static var  startOffsetOfThisMonth : Int{
+        Calendar.current.component(.weekday, from: startDateOfThisMonth) - 1
+    }
     static var datesInThisMonth : [Date] {
         let calendar = Calendar.current
         guard let range = calendar.range(of: .day, in: .month, for: .now) else {
